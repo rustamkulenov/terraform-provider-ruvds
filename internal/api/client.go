@@ -11,7 +11,7 @@ const (
 	DefaultEndpoint = "https://api.ruvds.com/v2"
 )
 
-// Currencies
+// Currencies.
 const (
 	CurrencyRUB = 1
 	CurrencyUSD = 3
@@ -27,7 +27,7 @@ var (
 	}
 )
 
-// Counties ISO codes
+// Counties ISO codes.
 const (
 	CountryRussia       = "RU"
 	CountryKazakhstan   = "KZ"
@@ -91,7 +91,7 @@ func NewClient(token, endpoint string) *Client {
 // The response is expected to be in JSON format.
 // If the response status code is not in the 2xx range, an error is returned.
 // The method returns the HTTP response or an error if the request fails.
-func (c *Client) doRequest(method, path string, body any) (*http.Response, error) {
+func (c *Client) doRequest(method, path string, _ /*body*/ any) (*http.Response, error) {
 	req, err := http.NewRequest(method, c.endpoint+path, nil)
 	if err != nil {
 		return nil, err
@@ -131,6 +131,8 @@ func (c *Client) doGet(path string, params ...string) (*http.Response, error) {
 	return c.doRequest("GET", path, nil)
 }
 
+/*
+
 // doPost performs a POST request to the RUVDS API.
 // It takes the path and an optional body as parameters and returns the HTTP response or an error.
 // The path is the API endpoint to which the request is made starting from "/".
@@ -157,6 +159,8 @@ func (c *Client) doDelete(path string) (*http.Response, error) {
 	return c.doRequest("DELETE", path, nil)
 }
 
+*/
+
 // getEntity retrieves an entity of type T from the RUVDS API.
 // It takes the path and optional parameters as arguments.
 // The path is the API endpoint to which the request is made starting from "/".
@@ -174,6 +178,8 @@ func getEntity[T any](c *Client, path string, params ...string) (*T, error) {
 
 	return &result, nil
 }
+
+/*
 
 // createEntity creates a new entity of type T in the RUVDS API.
 // It takes the path and the body of type T as arguments.
@@ -227,6 +233,8 @@ func deleteEntity(c *Client, path string) error {
 
 	return nil
 }
+
+*/
 
 // GetDataCenters retrieves a list of data centers from the RUVDS API.
 func (c *Client) GetDataCenters() (*DataCentersResponse, error) {

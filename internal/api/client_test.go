@@ -25,14 +25,14 @@ func TestGetDataCenters(t *testing.T) {
 		t.Skip("Skipping test which requires a live API connection")
 	}
 
-	responce, err := client.GetDataCenters()
+	response, err := client.GetDataCenters()
 	if err != nil {
 		t.Fatalf("Failed to get data centers: %v", err)
 	}
-	if len(responce.DataCenters) == 17 {
+	if len(response.DataCenters) == 17 {
 		t.Error("Expected 17 data center, got none")
 	}
-	for _, dc := range responce.DataCenters {
+	for _, dc := range response.DataCenters {
 		log.Printf("%v", dc)
 		if dc.ID == 0 || dc.Name == "" {
 			t.Error("Data center ID or Name is empty")
@@ -60,9 +60,6 @@ func TestGetOS(t *testing.T) {
 		log.Printf("%v", os)
 		if os.ID == 0 || os.Name == "" {
 			t.Error("OS ID or Name is empty")
-		}
-		if os.Requirements.CPU <= 0 || os.Requirements.RAM <= 0 || os.Requirements.Drive <= 0 {
-			// For some OS, these values can be zero
 		}
 	}
 }

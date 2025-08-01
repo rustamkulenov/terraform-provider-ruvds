@@ -107,7 +107,7 @@ func (d *DatacenterDataSource) Read(ctx context.Context, req datasource.ReadRequ
 	}
 	for _, dc := range dcs.DataCenters {
 		if dc.GetDatacenterCode() == data.WithCode.ValueString() {
-			data.Id = types.Int32Value(int32(dc.ID))
+			data.Id = types.Int32Value(dc.ID)
 			data.Name = types.StringValue(dc.Name)
 			data.Code = types.StringValue(dc.GetDatacenterCode())
 			data.Country = types.StringValue(dc.GetDatacenterCountryCode())
