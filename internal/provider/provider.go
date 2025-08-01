@@ -47,7 +47,7 @@ func (p *RuVdsProvider) Schema(ctx context.Context, req provider.SchemaRequest, 
 				Optional:            true,
 			},
 			"token": schema.StringAttribute{
-				MarkdownDescription: "RuVds provider API token",
+				MarkdownDescription: "RuVds provider API token. Can also be set via the `RUVDS_API_TOKEN` environment variable.",
 				Optional:            true,
 				Sensitive:           true,
 			},
