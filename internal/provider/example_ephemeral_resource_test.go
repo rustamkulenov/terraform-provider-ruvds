@@ -39,12 +39,12 @@ func TestAccExampleEphemeralResource(t *testing.T) {
 
 func testAccExampleEphemeralResourceConfig(configurableAttribute string) string {
 	return fmt.Sprintf(`
-ephemeral "scaffolding_example" "test" {
+ephemeral "ruvds_example" "test" {
   configurable_attribute = %[1]q
 }
 
 provider "echo" {
-  data = ephemeral.scaffolding_example.test
+  data = ephemeral.ruvds_example.test
 }
 
 resource "echo" "test" {}
