@@ -2,6 +2,7 @@ package provider
 
 import (
 	"context"
+	"os"
 
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/ephemeral"
@@ -47,7 +48,7 @@ func (p *RuVdsProvider) Schema(ctx context.Context, req provider.SchemaRequest, 
 			},
 			"token": schema.StringAttribute{
 				MarkdownDescription: "RuVds provider API token",
-				Required:            true,
+				Optional:            true,
 				Sensitive:           true,
 			},
 		},
@@ -63,12 +64,23 @@ func (p *RuVdsProvider) Configure(ctx context.Context, req provider.ConfigureReq
 		return
 	}
 
-	// Configuration values are now available.
-	// if data.Endpoint.IsNull() { /* ... */ }
+	token := data.Token.ValueString()
+
+	// If token not provided then try to get it from environment variable
+	if token == "" {
+		token = os.Getenv("RUVDS_API_TOKEN")
+		if token == "" {
+			resp.Diagnostics.AddError(
+				"Missing RuVDS API Token",
+				"Please set the RUVDS_API_TOKEN environment variable or provide a token in the provider configuration.",
+			)
+			return
+		}
+	}
 
 	// Client configuration for data sources and resources
 	client := api.NewClient(
-		data.Token.ValueString(),
+		token,
 		data.Endpoint.ValueString(),
 	)
 	resp.DataSourceData = client
