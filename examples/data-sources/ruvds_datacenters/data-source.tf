@@ -1,9 +1,9 @@
 data "ruvds_datacenters" "dcs" {
-    in_country = "RU"
+  in_country = "RU"
 }
 
 output "dcs_in_ru" {
-    value = data.ruvds_datacenters.dcs
+  value = data.ruvds_datacenters.dcs
 }
 
 # Gets list of datacenters in Russia.
