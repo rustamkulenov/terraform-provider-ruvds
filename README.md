@@ -1,7 +1,5 @@
 # Terraform Provider for [RUVDS](https://ruvds.com)
 
-_This repository is built on the [Terraform Plugin Framework](https://github.com/hashicorp/terraform-plugin-framework)._
-
 [RuVDS](https://ruvds.com) is an IAAS (cloud and VDS/VPS) provider offering virtual servers, dedicated hosting, domain registration, and DDoS protection at competitive prices. It features data centers in 7 countries, supporting both Linux and Windows environments. 
 
 This repository is a [Terraform](https://www.terraform.io)/[OpenTofu](https://opentofu.org/) provider allowing dynamic resource description, planning and provisioning on RuVDP and containing:
