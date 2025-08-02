@@ -6,5 +6,5 @@ partition: tf-ecosystem
 summary:
   owner: team-tf-core-plugins
   description: |
-    Quick start repository for creating a Terraform provider using terraform-plugin-framework
+    Repository with Terraform provider using terraform-plugin-framework
   visibility: public
