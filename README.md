@@ -1,8 +1,10 @@
-# Terraform Provider for RUVDS
+# Terraform Provider for [RUVDS](https://ruvds.com)
 
 _This repository is built on the [Terraform Plugin Framework](https://github.com/hashicorp/terraform-plugin-framework)._
 
-This repository is a [Terraform](https://www.terraform.io)/[OpenTofu](http://https://opentofu.org/) provider containing:
+[RuVDS](https://ruvds.com) is an IAAS (cloud and VDS/VPS) provider offering virtual servers, dedicated hosting, domain registration, and DDoS protection at competitive prices. It features data centers in 7 countries, supporting both Linux and Windows environments. 
+
+This repository is a [Terraform](https://www.terraform.io)/[OpenTofu](https://opentofu.org/) provider allowing dynamic resource description, planning and provisioning on RuVDP and containing:
 
 - Resources and data sources (`internal/provider/`),
 - Examples (`examples/`) and generated documentation (`docs/`),
@@ -93,7 +95,7 @@ tofu plan
 
 you'll see output like this:
 
-```json
+```text
 data.ruvds_datacenter.zur1: Reading...
 data.ruvds_datacenters.dcs: Reading...
 data.ruvds_datacenters.dcs: Read complete after 1s
@@ -127,6 +129,8 @@ Changes to Outputs:
 ## Developing the Provider
 
 If you wish to work on the provider, you'll first need [Go](http://www.golang.org) installed on your machine (see [Requirements](#requirements) above).
+
+The provider is built on the [Terraform Plugin Framework](https://github.com/hashicorp/terraform-plugin-framework) and uses [RuVDS API v2.24](https://ruvds.com/api-docs/).
 
 To compile the provider, run `go install`. This will build the provider and put the provider binary in the `$GOPATH/bin` directory.
 
