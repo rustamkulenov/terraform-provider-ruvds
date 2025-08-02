@@ -179,7 +179,7 @@ How to set environment variables in VS Code (in `.vscode/settings.json`):
 
 If you need to use/debug local provider in opentofu scripts then you'll probably need to configure tofu like this. Create `~/.tofurc` file with similar content (replace with your path to compiled provider folder):
 
-```json
+```text
 provider_installation {
 
   # Use provided path as an overridden package directory
