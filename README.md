@@ -51,14 +51,16 @@ This [OpenTofu provider](https://opentofu.org/docs/language/providers/) contains
 
 For using RuVDS provider you need to obtain API v2 token first. After that you can use it in your Terraform/OpenTofu configurations for getting data and provision resources.
 
+The provider is available on [public terraform registry](https://registry.terraform.io/providers/rustamkulenov/ruvds/latest).
+
 Sample usage of the provider:
 ```yaml
 terraform {
   required_providers {
     ruvds = {
-      source  = "hashicorp/ruvds"
+      source  = "rustamkulenov/ruvds"
       # Choose required version
-      #version = "1.0.0"
+      version = "1.0.0"
     }
   }
 }
