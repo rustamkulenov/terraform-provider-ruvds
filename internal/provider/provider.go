@@ -103,6 +103,8 @@ func (p *RuVdsProvider) DataSources(ctx context.Context) []func() datasource.Dat
 	return []func() datasource.DataSource{
 		datasources.NewDatacenterDataSource,
 		datasources.NewDatacentersDataSource,
+		datasources.NewOSesDataSource,
+		datasources.NewOSDataSource,
 	}
 }
 

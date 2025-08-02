@@ -38,7 +38,8 @@ This [OpenTofu provider](https://opentofu.org/docs/language/providers/) contains
 | --- | ---  | ---  | --- |
 | Data center | Data Source | [ruvds_datacenters](docs/data-sources/datacenters.md) | Gets list of data centers filtered by country
 | Data center | Data Source | [ruvds_datacenter](docs/data-sources/datacenter.md) | Gets information about specific Data center by code
-| OS | - | - | - |
+| OS | Data Source | [ruvds_oses](docs/data-sources/oses.md) | Gets list of all available OSes (codes) |
+| OS | Data Source | [ruvds_os](docs/data-sources/os.md) | Gets OS details by code |
 | Templates | - | - | - |
 | Servers | - | - | - |
 | SSH Keys | - | - | - |
