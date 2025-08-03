@@ -61,10 +61,27 @@ type CreateVpsErrorResponse struct {
 	TwoFactorEmail  string `json:"two_factor_email,omitempty"`
 }
 
+type ApiActionResult struct {
+	ID           int32  `json:"id"`
+	Type         string `json:"type"`
+	Status       string `json:"status"`
+	Progress     int32  `json:"progress"`
+	Started      string `json:"started"`
+	Finished     string `json:"finished"`
+	ResourceId   int32  `json:"resource_id"`
+	ResourceType string `json:"resource_type"`
+}
+
+type GenericError struct {
+	Message string `json:"message"`
+	Id      string `json:"id"`
+}
+
 type CreateVpsOkResponse struct {
-	VirtualServerId int32         `json:"virtual_server_id"`
-	PaymentPeriod   int32         `json:"payment_period"`
-	CostRub         float64       `json:"cost_rub"`
-	Password        string        `json:"password"`
-	Status          VirtualServer `json:"status"`
+	VirtualServerId int32           `json:"virtual_server_id"`
+	PaymentPeriod   int32           `json:"payment_period"`
+	CostRub         float64         `json:"cost_rub"`
+	Password        string          `json:"password"`
+	Status          VirtualServer   `json:"status"`
+	Action          ApiActionResult `json:"action"`
 }

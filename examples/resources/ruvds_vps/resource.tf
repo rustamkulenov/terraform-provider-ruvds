@@ -95,3 +95,23 @@ output "my_vps_output" {
 #  "user_comment" = tostring(null)
 #  "vram" = tonumber(null)
 #}
+
+# If then remove the server from this configuration and run `tofy plan` again, you will see that the server will be marked for destruction:
+#  # ruvds_vps.my_vps will be destroyed
+#  # (because ruvds_vps.my_vps is not in configuration)
+#  - resource "ruvds_vps" "my_vps" {
+#      - cpu             = 1 -> null
+#      - create_progress = 0 -> null
+#      - datacenter_id   = 1 -> null
+#      - drive           = 20 -> null
+#      - drive_tariff_id = 1 -> null
+#      - id              = 2225631 -> null
+#      - ip              = 1 -> null
+#      - os_id           = 255 -> null
+#      - payment_period  = 2 -> null
+#      - ram             = 1 -> null
+#      - status          = "initializing" -> null
+#      - tariff_id       = 14 -> null
+#    }
+#
+#Plan: 0 to add, 0 to change, 1 to destroy.

@@ -271,13 +271,27 @@ func (r *VpsResource) Delete(ctx context.Context, req resource.DeleteRequest, re
 		return
 	}
 
-	// If applicable, this is a great opportunity to initialize any necessary
-	// provider client data and make a call using it.
-	// httpResp, err := r.client.Do(httpReq)
-	// if err != nil {
-	//     resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Unable to delete example, got error: %s", err))
-	//     return
-	// }
+	serverid := data.ID.ValueInt32()
+	if serverid == 0 {
+		resp.Diagnostics.AddError(
+			"Invalid ID",
+			"Virtual server ID is not set. Cannot delete.",
+		)
+		return
+	}
+	// Call API to delete the virtual server
+	actionResult, descr, err := r.client.DeleteVps(serverid)
+	if err != nil {
+		resp.Diagnostics.AddError(
+			"Client Error",
+			fmt.Sprintf("Unable to delete virtual server with ID %d, got error: %s: %v", serverid, err, *descr),
+		)
+		return
+	}
+	// Log the action result
+	tflog.Trace(ctx, fmt.Sprintf("Delete action result: ID=%d, Type=%s, Status=%s, Progress=%d, Started=%s, Finished=%s, ResourceID=%d, ResourceType=%s",
+		actionResult.ID, actionResult.Type, actionResult.Status, actionResult.Progress,
+		actionResult.Started, actionResult.Finished, actionResult.ResourceId, actionResult.ResourceType))
 }
 
 func (r *VpsResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {

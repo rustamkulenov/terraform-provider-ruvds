@@ -170,6 +170,8 @@ func (c *Client) doPut(path string, body any) (*http.Response, error) {
 	return c.doRequest("PUT", path, body)
 }
 
+*/
+
 // doDelete performs a DELETE request to the RUVDS API.
 // It takes the path as a parameter and returns the HTTP response or an error.
 // The path is the API endpoint to which the request is made starting from "/".
@@ -179,8 +181,6 @@ func (c *Client) doPut(path string, body any) (*http.Response, error) {
 func (c *Client) doDelete(path string) (*http.Response, error) {
 	return c.doRequest("DELETE", path, nil)
 }
-
-*/
 
 // getEntity retrieves an entity of type T from the RUVDS API.
 // It takes the path and optional parameters as arguments.
@@ -246,24 +246,32 @@ func putEntity[T any](c *Client, path string, body T) (*T, error) {
 	return &result, nil
 }
 
+*/
+
 // deleteEntity deletes an entity from the RUVDS API.
 // It takes the path as an argument.
 // The path is the API endpoint to which the request is made starting from "/".
-func deleteEntity(c *Client, path string) error {
+func deleteEntity[R any, E any](c *Client, path string) (*R, *E, error) {
 	resp, err := c.doDelete(path)
 	if err != nil {
-		return err
+		if resp != nil {
+			// Read the response body to provide more context of the error
+			defer resp.Body.Close()
+			var descr E
+			_ = json.NewDecoder(resp.Body).Decode(&descr)
+			return nil, &descr, err
+		}
+		return nil, nil, err
 	}
 	defer resp.Body.Close()
 
-	if resp.StatusCode != http.StatusNoContent {
-		return errors.New("failed to delete entity, status: " + resp.Status)
+	var result R
+	if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
+		return nil, nil, err
 	}
 
-	return nil
+	return &result, nil, nil
 }
-
-*/
 
 // GetDataCenters retrieves a list of data centers from the RUVDS API.
 func (c *Client) GetDataCenters() (*DataCentersResponse, error) {
@@ -304,6 +312,15 @@ func (c *Client) GetVps(id int32) (*VirtualServer, error) {
 // CreateVps creates a new virtual server with the provided configuration in the RUVDS API.
 func (c *Client) CreateVps(vps *VirtualServer) (*CreateVpsOkResponse, *CreateVpsErrorResponse, error) {
 	resp, descr, err := postEntity[VirtualServer, CreateVpsOkResponse, CreateVpsErrorResponse](c, "/servers", vps)
+	if err != nil {
+		return nil, descr, err
+	}
+	return resp, nil, nil
+}
+
+// DeleteVps deletes a virtual server by its ID from the RUVDS API.
+func (c *Client) DeleteVps(id int32) (*ApiActionResult, *GenericError, error) {
+	resp, descr, err := deleteEntity[ApiActionResult, GenericError](c, "/servers/"+strconv.Itoa(int(id)))
 	if err != nil {
 		return nil, descr, err
 	}
