@@ -49,7 +49,7 @@ func TestGetOS(t *testing.T) {
 		t.Skip("Skipping test which requires a live API connection")
 	}
 
-	response, err := client.GetOS()
+	response, err := client.GetOSList()
 	if err != nil {
 		t.Fatalf("Failed to get OS: %v", err)
 	}

@@ -11,29 +11,29 @@ import (
 	"github.com/rustamkulenov/terraform-provider-ruvds/internal/api"
 )
 
-// OSesDataSource is a data source for retrieving information about operating systems.
-type OSesDataSource struct {
+// OSListDataSource is a data source for retrieving information about operating systems.
+type OSListDataSource struct {
 	client *api.Client
 }
 
-func NewOSesDataSource() datasource.DataSource {
-	return &OSesDataSource{}
+func NewOSListDataSource() datasource.DataSource {
+	return &OSListDataSource{}
 }
 
-var _ datasource.DataSource = &OSesDataSource{}
+var _ datasource.DataSource = &OSListDataSource{}
 
-// OSesDataSourceModel describes the data source data model.
-type OSesDataSourceModel struct {
+// OSListDataSourceModel describes the data source data model.
+type OSListDataSourceModel struct {
 	// Names is a list of OS codes available in the provider.
 	Codes    types.List   `tfsdk:"codes"`
 	WithType types.String `tfsdk:"with_type"`
 }
 
-func (d *OSesDataSource) Metadata(ctx context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
-	resp.TypeName = req.ProviderTypeName + "_oses"
+func (d *OSListDataSource) Metadata(ctx context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
+	resp.TypeName = req.ProviderTypeName + "_os_list"
 }
 
-func (d *OSesDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
+func (d *OSListDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
 		MarkdownDescription: "Available Operating Systems data source",
@@ -52,7 +52,7 @@ func (d *OSesDataSource) Schema(ctx context.Context, req datasource.SchemaReques
 	}
 }
 
-func (d *OSesDataSource) Configure(ctx context.Context, req datasource.ConfigureRequest, resp *datasource.ConfigureResponse) {
+func (d *OSListDataSource) Configure(ctx context.Context, req datasource.ConfigureRequest, resp *datasource.ConfigureResponse) {
 	// Prevent panic if the provider has not been configured.
 	if req.ProviderData == nil {
 		return
@@ -72,8 +72,8 @@ func (d *OSesDataSource) Configure(ctx context.Context, req datasource.Configure
 	d.client = client
 }
 
-func (d *OSesDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
-	var data OSesDataSourceModel
+func (d *OSListDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
+	var data OSListDataSourceModel
 
 	// Read Terraform configuration data into the model
 	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
@@ -82,7 +82,7 @@ func (d *OSesDataSource) Read(ctx context.Context, req datasource.ReadRequest, r
 		return
 	}
 
-	oses, err := d.client.GetOS()
+	oses, err := d.client.GetOSList()
 	if err != nil {
 		resp.Diagnostics.AddError(
 			"Client Error",

@@ -110,7 +110,7 @@ func (d *OSDataSource) Read(ctx context.Context, req datasource.ReadRequest, res
 		return
 	}
 
-	oses, err := d.client.GetOS()
+	oses, err := d.client.GetOSList()
 	if err != nil {
 		resp.Diagnostics.AddError(
 			"Client Error",

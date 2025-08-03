@@ -1,9 +1,9 @@
-data "ruvds_oses" "oses" {
+data "ruvds_os_list" "oses" {
   with_type = "linux"
 }
 
 output "linux_oses" {
-  value = data.ruvds_oses.oses
+  value = data.ruvds_os_list.oses
 }
 
 # Get list of all Linux OSes.

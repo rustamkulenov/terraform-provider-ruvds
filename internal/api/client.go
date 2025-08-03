@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"net/http"
+	"strconv"
 )
 
 const (
@@ -245,9 +246,27 @@ func (c *Client) GetDataCenters() (*DataCentersResponse, error) {
 	return resp, nil
 }
 
-// GetOS retrieves a list of operating systems from the RUVDS API.
-func (c *Client) GetOS() (*OSResponse, error) {
+// GetOSList retrieves a list of operating systems from the RUVDS API.
+func (c *Client) GetOSList() (*OSResponse, error) {
 	resp, err := getEntity[OSResponse](c, "/os")
+	if err != nil {
+		return nil, err
+	}
+	return resp, nil
+}
+
+// GetVpsList retrieves a list of virtual servers from the RUVDS API.
+func (c *Client) GetVpsList() (*VirtualServersResponse, error) {
+	resp, err := getEntity[VirtualServersResponse](c, "/servers")
+	if err != nil {
+		return nil, err
+	}
+	return resp, nil
+}
+
+// GetVps retrieves a specific virtual server by its ID from the RUVDS API.
+func (c *Client) GetVps(id int32) (*VirtualServer, error) {
+	resp, err := getEntity[VirtualServer](c, "/servers/"+strconv.Itoa(int(id)))
 	if err != nil {
 		return nil, err
 	}
