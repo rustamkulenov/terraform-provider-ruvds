@@ -13,6 +13,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/rustamkulenov/terraform-provider-ruvds/internal/api"
 	"github.com/rustamkulenov/terraform-provider-ruvds/internal/provider/datasources"
+	"github.com/rustamkulenov/terraform-provider-ruvds/internal/provider/resources"
 )
 
 // Ensure RuVdsProvider satisfies various provider interfaces.
@@ -89,13 +90,13 @@ func (p *RuVdsProvider) Configure(ctx context.Context, req provider.ConfigureReq
 
 func (p *RuVdsProvider) Resources(ctx context.Context) []func() resource.Resource {
 	return []func() resource.Resource{
-		NewExampleResource,
+		resources.NewVpsResource,
 	}
 }
 
 func (p *RuVdsProvider) EphemeralResources(ctx context.Context) []func() ephemeral.EphemeralResource {
 	return []func() ephemeral.EphemeralResource{
-		NewExampleEphemeralResource,
+		//NewExampleEphemeralResource,
 	}
 }
 
@@ -111,7 +112,7 @@ func (p *RuVdsProvider) DataSources(ctx context.Context) []func() datasource.Dat
 
 func (p *RuVdsProvider) Functions(ctx context.Context) []func() function.Function {
 	return []func() function.Function{
-		NewExampleFunction,
+		//NewExampleFunction,
 	}
 }
 

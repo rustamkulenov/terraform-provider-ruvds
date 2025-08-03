@@ -64,6 +64,24 @@ func TestGetOS(t *testing.T) {
 	}
 }
 
+// Test creating a VPS.
+func TestCreateVps(t *testing.T) {
+	// Disable test which creates a VPS, as it requires a live API connection.
+	/*
+		if client == nil {
+			t.Skip("Skipping test which requires a live API connection")
+		}
+
+		vps := CreateVpsRequest(1, 14, 2, 255, 1, 1.0, 20, 1, 1)
+
+		response, err, descr := client.CreateVps(&vps)
+		if err != nil {
+			t.Fatalf("Failed to create VPS: %v: %v", err, descr)
+		}
+		log.Printf("Created VPS: %v", *response)
+	*/
+}
+
 func init() {
 	// Environment variable can be set in VSCode settings:
 	// in .vscode/settings.json add:

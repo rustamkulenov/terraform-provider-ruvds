@@ -1,8 +1,10 @@
 package api
 
 import (
+	"bytes"
 	"encoding/json"
 	"errors"
+	"io"
 	"net/http"
 	"strconv"
 )
@@ -92,8 +94,8 @@ func NewClient(token, endpoint string) *Client {
 // The response is expected to be in JSON format.
 // If the response status code is not in the 2xx range, an error is returned.
 // The method returns the HTTP response or an error if the request fails.
-func (c *Client) doRequest(method, path string, _ /*body*/ any) (*http.Response, error) {
-	req, err := http.NewRequest(method, c.endpoint+path, nil)
+func (c *Client) doRequest(method, path string, body io.Reader) (*http.Response, error) {
+	req, err := http.NewRequest(method, c.endpoint+path, body)
 	if err != nil {
 		return nil, err
 	}
@@ -103,11 +105,11 @@ func (c *Client) doRequest(method, path string, _ /*body*/ any) (*http.Response,
 
 	resp, err := c.httpClient.Do(req)
 	if err != nil {
-		return nil, err
+		return resp, err
 	}
 
 	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
-		return nil, errors.New("API request failed with status: " + resp.Status)
+		return resp, errors.New("API request failed with status: " + resp.Status)
 	}
 
 	return resp, nil
@@ -132,15 +134,33 @@ func (c *Client) doGet(path string, params ...string) (*http.Response, error) {
 	return c.doRequest("GET", path, nil)
 }
 
-/*
-
 // doPost performs a POST request to the RUVDS API.
 // It takes the path and an optional body as parameters and returns the HTTP response or an error.
 // The path is the API endpoint to which the request is made starting from "/".
 // The body is optional and can be used for POST requests.
-func (c *Client) doPost(path string, body any) (*http.Response, error) {
-	return c.doRequest("POST", path, body)
+func (c *Client) doPost(path string, body any, params ...string) (*http.Response, error) {
+	if len(params) > 0 {
+		path += "?"
+		for i, param := range params {
+			if i > 0 {
+				path += "&"
+			}
+			path += param
+		}
+	}
+	var buf *bytes.Buffer
+	if body != nil {
+		jsonBody, err := json.Marshal(body)
+		if err != nil {
+			return nil, err
+		}
+		buf = bytes.NewBuffer(jsonBody)
+	}
+	return c.doRequest("POST", path, buf)
 }
+
+/*
+
 
 // doPut performs a PUT request to the RUVDS API.
 // It takes the path and an optional body as parameters and returns the HTTP response or an error.
@@ -180,30 +200,38 @@ func getEntity[T any](c *Client, path string, params ...string) (*T, error) {
 	return &result, nil
 }
 
-/*
-
-// createEntity creates a new entity of type T in the RUVDS API.
+// postEntity creates/updates a new entity of type T in the RUVDS API.
 // It takes the path and the body of type T as arguments.
 // The path is the API endpoint to which the request is made starting from "/".
-func createEntity[T any](c *Client, path string, body T) (*T, error) {
+func postEntity[B any, R any, E any](c *Client, path string, body *B) (*R, error, *E) {
 	resp, err := c.doPost(path, body)
 	if err != nil {
-		return nil, err
+		if resp != nil {
+			// Read the response body to provide more context of the error
+			defer resp.Body.Close()
+			var descr E
+			_ = json.NewDecoder(resp.Body).Decode(&descr)
+			return nil, err, &descr
+		}
+		return nil, err, nil
 	}
 	defer resp.Body.Close()
 
-	var result T
+	var result R
 	if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
-		return nil, err
+		return nil, err, nil
 	}
 
-	return &result, nil
+	return &result, nil, nil
 }
 
-// updateEntity updates an existing entity of type T in the RUVDS API.
+/*
+
+
+// putEntity updates an existing entity of type T in the RUVDS API.
 // It takes the path and the body of type T as arguments.
 // The path is the API endpoint to which the request is made starting from "/".
-func updateEntity[T any](c *Client, path string, body T) (*T, error) {
+func putEntity[T any](c *Client, path string, body T) (*T, error) {
 	resp, err := c.doPut(path, body)
 	if err != nil {
 		return nil, err
@@ -271,4 +299,13 @@ func (c *Client) GetVps(id int32) (*VirtualServer, error) {
 		return nil, err
 	}
 	return resp, nil
+}
+
+// CreateVps creates a new virtual server with the provided configuration in the RUVDS API.
+func (c *Client) CreateVps(vps *VirtualServer) (*CreateVpsOkResponse, error, *CreateVpsErrorResponse) {
+	resp, err, descr := postEntity[VirtualServer, CreateVpsOkResponse, CreateVpsErrorResponse](c, "/servers", vps)
+	if err != nil {
+		return nil, err, descr
+	}
+	return resp, nil, nil
 }

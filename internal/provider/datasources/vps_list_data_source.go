@@ -135,20 +135,24 @@ func (d *VpsListDataSource) Read(ctx context.Context, req datasource.ReadRequest
 	for _, srv := range vpses.VirtualServers {
 		vps := VpsModel{
 			ID:             types.Int64Value(int64(srv.ID)),
-			Status:         types.StringValue(srv.Status),
 			CreateProgress: types.Int64Value(int64(srv.CreateProgress)),
 			DataCenterID:   types.Int64Value(int64(srv.DataCenterID)),
 			TariffID:       types.Int64Value(int64(srv.TariffID)),
 			PaymentPeriod:  types.Int64Value(int64(srv.PaymentPeriod)),
 			OSID:           types.Int64Value(int64(srv.OSID)),
 			CPU:            types.Int64Value(int64(srv.CPU)),
-			RAM:            types.Float64Value(srv.RAM),
+			RAM:            types.Float64Value(float64(srv.RAM)),
 			VRAM:           types.Int64Value(int64(srv.VRAM)),
 			Drive:          types.Int64Value(int64(srv.Drive)),
 			DriveTariffID:  types.Int64Value(int64(srv.DriveTariffID)),
 			IP:             types.Int64Value(int64(srv.IP)),
 			DDOSProtection: types.Float32Value(srv.DDOSProtection),
 			PaidTill:       types.StringValue(srv.PaidTill),
+		}
+		if srv.Status != nil {
+			vps.Status = types.StringValue(*srv.Status)
+		} else {
+			vps.Status = types.StringNull()
 		}
 		if srv.TemplateID != nil {
 			vps.TemplateID = types.StringValue(*srv.TemplateID)
