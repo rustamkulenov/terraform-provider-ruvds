@@ -17,7 +17,7 @@ output "my_vps_output" {
 # Creates a new virtual server with the specified hardcoded parameters (mandatory).
 # These parameters can also be replaced with variables or data sources as needed. 
 #
-# > tofy plan
+# > tofu plan
 #
 # Output:
 #  # ruvds_vps.my_vps will be created
@@ -63,7 +63,7 @@ output "my_vps_output" {
 #      + vram                       = null
 #    }
 
-# > tofy apply
+# > tofu apply
 #
 #ruvds_vps.my_vps: Creating...
 #ruvds_vps.my_vps: Creation complete after 1s
@@ -96,7 +96,7 @@ output "my_vps_output" {
 #  "vram" = tonumber(null)
 #}
 
-# If then remove the server from this configuration and run `tofy plan` again, you will see that the server will be marked for destruction:
+# If then remove the server from this configuration and run `tofu plan` again, you will see that the server will be marked for destruction:
 #  # ruvds_vps.my_vps will be destroyed
 #  # (because ruvds_vps.my_vps is not in configuration)
 #  - resource "ruvds_vps" "my_vps" {
