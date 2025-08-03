@@ -36,6 +36,7 @@ This [OpenTofu provider](https://opentofu.org/docs/language/providers/) contains
 
 | Entity | Type | Name | Description
 | --- | ---  | ---  | --- |
+|  | Provider  | [ruvds](docs/index.md)  | Allows gettings info and managing infrastructure on RuVDS cloud |
 | Data center | Data Source | [ruvds_datacenters](docs/data-sources/datacenters.md) | Gets list of data centers filtered by country
 | Data center | Data Source | [ruvds_datacenter](docs/data-sources/datacenter.md) | Gets information about specific Data center by code
 | OS | Data Source | [ruvds_os_list](docs/data-sources/os_list.md) | Gets list of all available OSes (codes) |
