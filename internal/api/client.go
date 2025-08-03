@@ -203,7 +203,7 @@ func getEntity[T any](c *Client, path string, params ...string) (*T, error) {
 // postEntity creates/updates a new entity of type T in the RUVDS API.
 // It takes the path and the body of type T as arguments.
 // The path is the API endpoint to which the request is made starting from "/".
-func postEntity[B any, R any, E any](c *Client, path string, body *B) (*R, error, *E) {
+func postEntity[B any, R any, E any](c *Client, path string, body *B) (*R, *E, error) {
 	resp, err := c.doPost(path, body)
 	if err != nil {
 		if resp != nil {
@@ -211,15 +211,15 @@ func postEntity[B any, R any, E any](c *Client, path string, body *B) (*R, error
 			defer resp.Body.Close()
 			var descr E
 			_ = json.NewDecoder(resp.Body).Decode(&descr)
-			return nil, err, &descr
+			return nil, &descr, err
 		}
-		return nil, err, nil
+		return nil, nil, err
 	}
 	defer resp.Body.Close()
 
 	var result R
 	if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
-		return nil, err, nil
+		return nil, nil, err
 	}
 
 	return &result, nil, nil
@@ -302,10 +302,10 @@ func (c *Client) GetVps(id int32) (*VirtualServer, error) {
 }
 
 // CreateVps creates a new virtual server with the provided configuration in the RUVDS API.
-func (c *Client) CreateVps(vps *VirtualServer) (*CreateVpsOkResponse, error, *CreateVpsErrorResponse) {
-	resp, err, descr := postEntity[VirtualServer, CreateVpsOkResponse, CreateVpsErrorResponse](c, "/servers", vps)
+func (c *Client) CreateVps(vps *VirtualServer) (*CreateVpsOkResponse, *CreateVpsErrorResponse, error) {
+	resp, descr, err := postEntity[VirtualServer, CreateVpsOkResponse, CreateVpsErrorResponse](c, "/servers", vps)
 	if err != nil {
-		return nil, err, descr
+		return nil, descr, err
 	}
 	return resp, nil, nil
 }

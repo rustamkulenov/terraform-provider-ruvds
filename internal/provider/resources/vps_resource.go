@@ -194,7 +194,7 @@ func (r *VpsResource) Create(ctx context.Context, req resource.CreateRequest, re
 		plan.IP.ValueInt32(),
 	)
 
-	response, err, descr := r.client.CreateVps(&vps)
+	response, descr, err := r.client.CreateVps(&vps)
 	if err != nil {
 		resp.Diagnostics.AddError(
 			"Client Error",
