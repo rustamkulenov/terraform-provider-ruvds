@@ -44,7 +44,8 @@ This [OpenTofu provider](https://opentofu.org/docs/language/providers/) contains
 | Servers | Data Source | [ruvds_vps_list](docs/data-sources/vps_list.md) | Gets list of created VPS |
 | Servers | Resource | [ruvds_vps](docs/resources/vps.md) | CRUD operations on virtual servers |
 | Templates | - | - | - |
-| SSH Keys | - | - | - |
+| SSH Keys | Data Source | [ruvds_ssh_list](docs/data-sources/ssh_list.md) | Gets list of deployed SSH keys |
+| SSH Keys | Resource | [ruvds_ssh](docs/resources/ssh.md) | Imports,creates, deletes SSH keys |
 | Tarifs | - | - | - |
 | Balance | - | - | - |
 | Payments | - | - | - |
