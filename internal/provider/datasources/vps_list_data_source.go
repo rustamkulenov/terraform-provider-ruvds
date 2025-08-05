@@ -12,7 +12,7 @@ import (
 	"github.com/rustamkulenov/terraform-provider-ruvds/internal/api"
 )
 
-// VpsListDataSource is a data source for retrieving information about operating systems.
+// VpsListDataSource is a data source for retrieving information about operating VPS.
 type VpsListDataSource struct {
 	client *api.Client
 }
@@ -136,15 +136,15 @@ func (d *VpsListDataSource) Read(ctx context.Context, req datasource.ReadRequest
 		vps := VpsModel{
 			ID:             types.Int64Value(int64(srv.ID)),
 			CreateProgress: types.Int64Value(int64(srv.CreateProgress)),
-			DataCenterID:   types.Int64Value(int64(srv.DataCenterID)),
-			TariffID:       types.Int64Value(int64(srv.TariffID)),
+			DataCenterID:   types.Int64Value(int64(srv.DataCenterId)),
+			TariffID:       types.Int64Value(int64(srv.TariffId)),
 			PaymentPeriod:  types.Int64Value(int64(srv.PaymentPeriod)),
-			OSID:           types.Int64Value(int64(srv.OSID)),
+			OSID:           types.Int64Value(int64(srv.OSId)),
 			CPU:            types.Int64Value(int64(srv.CPU)),
 			RAM:            types.Float64Value(float64(srv.RAM)),
 			VRAM:           types.Int64Value(int64(srv.VRAM)),
 			Drive:          types.Int64Value(int64(srv.Drive)),
-			DriveTariffID:  types.Int64Value(int64(srv.DriveTariffID)),
+			DriveTariffID:  types.Int64Value(int64(srv.DriveTariffId)),
 			IP:             types.Int64Value(int64(srv.IP)),
 			DDOSProtection: types.Float32Value(srv.DDOSProtection),
 			PaidTill:       types.StringValue(srv.PaidTill),
@@ -154,8 +154,8 @@ func (d *VpsListDataSource) Read(ctx context.Context, req datasource.ReadRequest
 		} else {
 			vps.Status = types.StringNull()
 		}
-		if srv.TemplateID != nil {
-			vps.TemplateID = types.StringValue(*srv.TemplateID)
+		if srv.TemplateId != nil {
+			vps.TemplateID = types.StringValue(*srv.TemplateId)
 		} else {
 			vps.TemplateID = types.StringNull()
 		}
@@ -169,10 +169,10 @@ func (d *VpsListDataSource) Read(ctx context.Context, req datasource.ReadRequest
 		} else {
 			vps.AdditionalDrive = types.Int64Value(int64(*srv.AdditionalDrive))
 		}
-		if srv.AdditionalDriveTariffID == nil {
+		if srv.AdditionalDriveTariffId == nil {
 			vps.AdditionalDriveTariffID = types.Int64Null()
 		} else {
-			vps.AdditionalDriveTariffID = types.Int64Value(int64(*srv.AdditionalDriveTariffID))
+			vps.AdditionalDriveTariffID = types.Int64Value(int64(*srv.AdditionalDriveTariffId))
 		}
 		servers = append(servers, vps)
 	}

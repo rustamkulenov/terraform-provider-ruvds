@@ -326,3 +326,39 @@ func (c *Client) DeleteVps(id int32) (*ApiActionResult, *GenericError, error) {
 	}
 	return resp, nil, nil
 }
+
+// GetSshKeys retrieves a list of SSH keys from the RUVDS API.
+func (c *Client) GetSshKeyList() (*GetSSHKeysOkResponse, error) {
+	resp, err := getEntity[GetSSHKeysOkResponse](c, "/ssh_keys")
+	if err != nil {
+		return nil, err
+	}
+	return resp, nil
+}
+
+// CreateSSHKey creates a new SSH key in the RUVDS API.
+func (c *Client) CreateSshKey(sshKey CreateSSHKeyRequest) (*SSHKey, *GenericError, error) {
+	resp, descr, err := postEntity[CreateSSHKeyRequest, SSHKey, GenericError](c, "/ssh_keys", &sshKey)
+	if err != nil {
+		return nil, descr, err
+	}
+	return resp, nil, nil
+}
+
+// DeleteSSHKey deletes an SSH key by its ID from the RUVDS API.
+func (c *Client) DeleteSshKey(sshKeyId string) (*GenericError, error) {
+	_, descr, err := deleteEntity[GenericError, GenericError](c, "/ssh_keys/"+sshKeyId)
+	if err != nil {
+		return descr, err
+	}
+	return nil, nil
+}
+
+// GetSshKey retrieves a specific SSH key by its ID from the RUVDS API.
+func (c *Client) GetSshKey(sshKeyId string) (*SSHKey, error) {
+	resp, err := getEntity[SSHKey](c, "/ssh_keys/"+sshKeyId)
+	if err != nil {
+		return nil, err
+	}
+	return resp, nil
+}

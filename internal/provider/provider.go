@@ -91,6 +91,7 @@ func (p *RuVdsProvider) Configure(ctx context.Context, req provider.ConfigureReq
 func (p *RuVdsProvider) Resources(ctx context.Context) []func() resource.Resource {
 	return []func() resource.Resource{
 		resources.NewVpsResource,
+		resources.NewSshResource,
 	}
 }
 
@@ -107,6 +108,7 @@ func (p *RuVdsProvider) DataSources(ctx context.Context) []func() datasource.Dat
 		datasources.NewOSListDataSource,
 		datasources.NewOSDataSource,
 		datasources.NewVpsListDataSource,
+		datasources.NewSshListDataSource,
 	}
 }
 

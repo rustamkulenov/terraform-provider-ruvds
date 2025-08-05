@@ -10,18 +10,18 @@ type VirtualServer struct {
 	ID                      int32       `json:"virtual_server_id"`
 	Status                  *string     `json:"status,omitempty"`
 	CreateProgress          int32       `json:"create_progress"`
-	DataCenterID            int32       `json:"datacenter"`
-	TariffID                int32       `json:"tariff_id"`
+	DataCenterId            int32       `json:"datacenter"`
+	TariffId                int32       `json:"tariff_id"`
 	PaymentPeriod           int32       `json:"payment_period"`
-	OSID                    int32       `json:"os_id"`
-	TemplateID              *string     `json:"template_id,omitempty"`
+	OSId                    int32       `json:"os_id"`
+	TemplateId              *string     `json:"template_id,omitempty"`
 	CPU                     int32       `json:"cpu"`
 	RAM                     float32     `json:"ram"`
 	VRAM                    int32       `json:"vram"`
 	Drive                   int32       `json:"drive"`
-	DriveTariffID           int32       `json:"drive_tariff_id"`
+	DriveTariffId           int32       `json:"drive_tariff_id"`
 	AdditionalDrive         *int32      `json:"additional_drive,omitempty"`
-	AdditionalDriveTariffID *int32      `json:"additional_drive_tariff_id,omitempty"`
+	AdditionalDriveTariffId *int32      `json:"additional_drive_tariff_id,omitempty"`
 	IP                      int32       `json:"ip"`
 	DDOSProtection          float32     `json:"ddos_protection"`
 	UserComment             *string     `json:"user_comment,omitempty"`
@@ -38,14 +38,14 @@ type VirtualServersResponse struct {
 // CreateVpsRequest creates a new virtual server request with the minimum list of mandatory parameters.
 func CreateVpsRequest(datacenterId int32, tariffId int32, paymentPeriod int32, osId int32, cpu int32, ram float32, drive int32, driveTariffId int32, ip int32) VirtualServer {
 	return VirtualServer{
-		DataCenterID:  datacenterId,
-		TariffID:      tariffId,
+		DataCenterId:  datacenterId,
+		TariffId:      tariffId,
 		PaymentPeriod: paymentPeriod,
-		OSID:          osId,
+		OSId:          osId,
 		CPU:           cpu,
 		RAM:           ram,
 		Drive:         drive,
-		DriveTariffID: driveTariffId,
+		DriveTariffId: driveTariffId,
 		IP:            ip,
 	}
 }

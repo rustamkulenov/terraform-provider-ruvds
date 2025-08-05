@@ -151,6 +151,11 @@ func (r *VpsResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 	}
 }
 
+func (r *VpsResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
+	// Parse the import ID (simple passthrough in this case)
+	resource.ImportStatePassthroughID(ctx, path.Root("id"), req, resp)
+}
+
 func (r *VpsResource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
 	// Prevent panic if the provider has not been configured.
 	if req.ProviderData == nil {
@@ -227,13 +232,70 @@ func (r *VpsResource) Read(ctx context.Context, req resource.ReadRequest, resp *
 		return
 	}
 
-	// If applicable, this is a great opportunity to initialize any necessary
-	// provider client data and make a call using it.
-	// httpResp, err := r.client.Do(httpReq)
-	// if err != nil {
-	//     resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Unable to read example, got error: %s", err))
-	//     return
-	// }
+	// Get virtual server by ID and update the model
+	if data.ID.ValueInt32() == 0 {
+		resp.Diagnostics.AddError(
+			"Invalid ID",
+			"Virtual server ID is not set. Cannot read.",
+		)
+		return
+	}
+	vps, err := r.client.GetVps(data.ID.ValueInt32())
+	if err != nil {
+		resp.Diagnostics.AddError(
+			"Client Error",
+			fmt.Sprintf("Unable to read virtual server with ID %d, got error: %s", data.ID.ValueInt32(), err),
+		)
+		return
+	}
+	data.CreateProgress = types.Int32Value(vps.CreateProgress)
+	data.DataCenterID = types.Int32Value(vps.DataCenterId)
+	data.TariffID = types.Int32Value(vps.TariffId)
+	data.PaymentPeriod = types.Int32Value(vps.PaymentPeriod)
+	data.OSID = types.Int32Value(vps.OSId)
+	data.CPU = types.Int32Value(vps.CPU)
+	data.RAM = types.Float32Value(vps.RAM)
+	data.VRAM = types.Int32Value(vps.VRAM)
+	data.Drive = types.Int32Value(vps.Drive)
+	data.DriveTariffID = types.Int32Value(vps.DriveTariffId)
+	data.IP = types.Int32Value(vps.IP)
+	data.DDOSProtection = types.Float32Value(vps.DDOSProtection)
+	data.PaidTill = types.StringValue(vps.PaidTill)
+	if vps.Status != nil {
+		data.Status = types.StringValue(*vps.Status)
+	} else {
+		data.Status = types.StringNull()
+	}
+	if vps.TemplateId != nil {
+		data.TemplateID = types.StringValue(*vps.TemplateId)
+	} else {
+		data.TemplateID = types.StringNull()
+	}
+	if vps.AdditionalDrive != nil {
+		data.AdditionalDrive = types.Int32Value(*vps.AdditionalDrive)
+	} else {
+		data.AdditionalDrive = types.Int32Null()
+	}
+	if vps.AdditionalDriveTariffId != nil {
+		data.AdditionalDriveTariffID = types.Int32Value(*vps.AdditionalDriveTariffId)
+	} else {
+		data.AdditionalDriveTariffID = types.Int32Null()
+	}
+	if vps.UserComment != nil {
+		data.UserComment = types.StringValue(*vps.UserComment)
+	} else {
+		data.UserComment = types.StringNull()
+	}
+	if vps.SShKeyID != nil {
+		data.SShKeyId = types.StringValue(*vps.SShKeyID)
+	} else {
+		data.SShKeyId = types.StringNull()
+	}
+	if vps.ComputerName != nil {
+		data.ComputerName = types.StringValue(*vps.ComputerName)
+	} else {
+		data.ComputerName = types.StringNull()
+	}
 
 	// Save updated data into Terraform state
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
@@ -292,8 +354,4 @@ func (r *VpsResource) Delete(ctx context.Context, req resource.DeleteRequest, re
 	tflog.Trace(ctx, fmt.Sprintf("Delete action result: ID=%d, Type=%s, Status=%s, Progress=%d, Started=%s, Finished=%s, ResourceID=%d, ResourceType=%s",
 		actionResult.ID, actionResult.Type, actionResult.Status, actionResult.Progress,
 		actionResult.Started, actionResult.Finished, actionResult.ResourceId, actionResult.ResourceType))
-}
-
-func (r *VpsResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
-	resource.ImportStatePassthroughID(ctx, path.Root("id"), req, resp)
 }
