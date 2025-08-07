@@ -134,17 +134,17 @@ func (d *VpsListDataSource) Read(ctx context.Context, req datasource.ReadRequest
 	servers := make([]VpsModel, 0, len(vpses.VirtualServers))
 	for _, srv := range vpses.VirtualServers {
 		vps := VpsModel{
-			ID:             types.Int32Value(int32(srv.ID)),
-			CreateProgress: types.Int32Value(int32(srv.CreateProgress)),
-			DataCenterID:   types.Int32Value(int32(srv.DataCenterId)),
-			TariffID:       types.Int32Value(int32(srv.TariffId)),
-			PaymentPeriod:  types.Int32Value(int32(srv.PaymentPeriod)),
-			OSID:           types.Int32Value(int32(srv.OSId)),
-			CPU:            types.Int32Value(int32(srv.CPU)),
-			RAM:            types.Float32Value(float32(srv.RAM)),
-			Drive:          types.Int32Value(int32(srv.Drive)),
-			DriveTariffID:  types.Int32Value(int32(srv.DriveTariffId)),
-			IP:             types.Int32Value(int32(srv.IP)),
+			ID:             types.Int32Value(srv.ID),
+			CreateProgress: types.Int32Value(srv.CreateProgress),
+			DataCenterID:   types.Int32Value(srv.DataCenterId),
+			TariffID:       types.Int32Value(srv.TariffId),
+			PaymentPeriod:  types.Int32Value(srv.PaymentPeriod),
+			OSID:           types.Int32Value(srv.OSId),
+			CPU:            types.Int32Value(srv.CPU),
+			RAM:            types.Float32Value(srv.RAM),
+			Drive:          types.Int32Value(srv.Drive),
+			DriveTariffID:  types.Int32Value(srv.DriveTariffId),
+			IP:             types.Int32Value(srv.IP),
 			DDOSProtection: types.Float32Value(srv.DDOSProtection),
 		}
 		if srv.VRAM != nil {
