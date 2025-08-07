@@ -173,4 +173,5 @@ The [`terraform import` command](https://developer.hashicorp.com/terraform/cli/c
 
 ```shell
 terraform import ruvds_vps.test 123456
+#> terraform show
 ```

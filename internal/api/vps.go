@@ -17,7 +17,7 @@ type VirtualServer struct {
 	TemplateId              *string     `json:"template_id,omitempty"`
 	CPU                     int32       `json:"cpu"`
 	RAM                     float32     `json:"ram"`
-	VRAM                    int32       `json:"vram"`
+	VRAM                    *int32      `json:"vram"`
 	Drive                   int32       `json:"drive"`
 	DriveTariffId           int32       `json:"drive_tariff_id"`
 	AdditionalDrive         *int32      `json:"additional_drive,omitempty"`
@@ -25,7 +25,7 @@ type VirtualServer struct {
 	IP                      int32       `json:"ip"`
 	DDOSProtection          float32     `json:"ddos_protection"`
 	UserComment             *string     `json:"user_comment,omitempty"`
-	PaidTill                string      `json:"paid_till"`
+	PaidTill                *string     `json:"paid_till"`
 	SShKeyID                *string     `json:"ssh_key_id,omitempty"`
 	ComputerName            *string     `json:"computer_name,omitempty"`
 	NetworkV4               []NetworkV4 `json:"network_v4"`

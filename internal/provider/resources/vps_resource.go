@@ -6,8 +6,8 @@ package resources
 import (
 	"context"
 	"fmt"
+	"strconv"
 
-	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/types"
@@ -25,7 +25,8 @@ func NewVpsResource() resource.Resource {
 
 // VpsResource defines the resource implementation.
 type VpsResource struct {
-	client *api.Client
+	importing bool
+	client    *api.Client
 }
 
 // VpsResourceModel describes the resource data model.
@@ -152,8 +153,25 @@ func (r *VpsResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 }
 
 func (r *VpsResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
-	// Parse the import ID (simple passthrough in this case)
-	resource.ImportStatePassthroughID(ctx, path.Root("id"), req, resp)
+	// Parse the import ID which contains Id of VDI to import
+	importID := req.ID
+
+	intValue, err := strconv.Atoi(importID)
+	if err != nil {
+		resp.Diagnostics.AddError(
+			"Invalid import ID",
+			fmt.Sprintf("Could not parse import ID as int32: %v", err),
+		)
+		return
+	}
+
+	// Convert to the appropriate type for state
+	state := VpsResourceModel{
+		ID: types.Int32Value(int32(intValue)),
+	}
+
+	// Set the state
+	resp.Diagnostics.Append(resp.State.Set(ctx, &state)...)
 }
 
 func (r *VpsResource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
@@ -186,6 +204,13 @@ func (r *VpsResource) Create(ctx context.Context, req resource.CreateRequest, re
 		return
 	}
 
+	if r.importing {
+		// Set defaults for mandatory fields during import
+		if plan.Drive.IsNull() {
+			plan.Drive = types.Int32Value(1)
+		}
+	}
+
 	// Call API to create the virtual server
 	vps := api.CreateVpsRequest(
 		plan.DataCenterID.ValueInt32(),
@@ -212,7 +237,7 @@ func (r *VpsResource) Create(ctx context.Context, req resource.CreateRequest, re
 	plan.ID = types.Int32Value(response.VirtualServerId)
 	plan.Status = types.StringValue(*response.Status.Status)
 	plan.CreateProgress = types.Int32Value(response.Status.CreateProgress)
-	plan.PaidTill = types.StringValue(response.Status.PaidTill)
+	plan.PaidTill = types.StringValue(*response.Status.PaidTill)
 
 	// Write logs using the tflog package
 	// Documentation: https://terraform.io/plugin/log
@@ -255,12 +280,21 @@ func (r *VpsResource) Read(ctx context.Context, req resource.ReadRequest, resp *
 	data.OSID = types.Int32Value(vps.OSId)
 	data.CPU = types.Int32Value(vps.CPU)
 	data.RAM = types.Float32Value(vps.RAM)
-	data.VRAM = types.Int32Value(vps.VRAM)
 	data.Drive = types.Int32Value(vps.Drive)
 	data.DriveTariffID = types.Int32Value(vps.DriveTariffId)
 	data.IP = types.Int32Value(vps.IP)
 	data.DDOSProtection = types.Float32Value(vps.DDOSProtection)
-	data.PaidTill = types.StringValue(vps.PaidTill)
+
+	if vps.VRAM != nil {
+		data.VRAM = types.Int32Value(*vps.VRAM)
+	} else {
+		data.VRAM = types.Int32Null()
+	}
+	if vps.PaidTill != nil {
+		data.PaidTill = types.StringValue(*vps.PaidTill)
+	} else {
+		data.PaidTill = types.StringNull()
+	}
 	if vps.Status != nil {
 		data.Status = types.StringValue(*vps.Status)
 	} else {
