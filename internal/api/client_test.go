@@ -64,6 +64,34 @@ func TestGetOS(t *testing.T) {
 	}
 }
 
+// Test getting VPS list.
+func TestGetVpsList(t *testing.T) {
+	if client == nil {
+		t.Skip("Skipping test which requires a live API connection")
+	}
+
+	response, err := client.GetVpsList()
+	if err != nil {
+		t.Fatalf("Failed to get VPS list: %v", err)
+	}
+	for _, vps := range response.VirtualServers {
+		log.Printf("%v", vps)
+	}
+}
+
+// Test getting VPS by Id.
+func TestGetVps(t *testing.T) {
+	if client == nil {
+		t.Skip("Skipping test which requires a live API connection")
+	}
+
+	response, err := client.GetVps(1882515)
+	if err != nil {
+		t.Fatalf("Failed to get VPS list: %v", err)
+	}
+	log.Printf("%v", response)
+}
+
 // Test creating a VPS.
 func TestCreateVps(t *testing.T) {
 	// Disable test which creates a VPS, as it requires a live API connection.

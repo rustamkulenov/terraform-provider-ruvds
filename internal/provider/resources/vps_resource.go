@@ -52,6 +52,9 @@ type VpsResourceModel struct {
 	UserComment             types.String  `tfsdk:"user_comment"`
 	SShKeyId                types.String  `tfsdk:"ssh_key_id"`
 	ComputerName            types.String  `tfsdk:"computer_name"`
+	IPAddress               types.String  `tfsdk:"ip_address"`
+	Netmask                 types.String  `tfsdk:"netmask"`
+	Gateway                 types.String  `tfsdk:"gateway"`
 }
 
 func (r *VpsResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
@@ -113,7 +116,7 @@ func (r *VpsResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 				Required:            true,
 			},
 			"ip": schema.Int32Attribute{
-				MarkdownDescription: "The ID of the IP address allocated to the virtual server.",
+				MarkdownDescription: "The number of IP address allocated to the virtual server.",
 				Required:            true,
 			},
 			"ddos_protection": schema.Float32Attribute{
@@ -148,6 +151,9 @@ func (r *VpsResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 				MarkdownDescription: "The name of the computer for the virtual server.",
 				Optional:            true,
 			},
+			"ip_address": schema.StringAttribute{Computed: true},
+			"netmask":    schema.StringAttribute{Computed: true},
+			"gateway":    schema.StringAttribute{Computed: true},
 		},
 	}
 }
@@ -238,6 +244,11 @@ func (r *VpsResource) Create(ctx context.Context, req resource.CreateRequest, re
 	plan.Status = types.StringValue(*response.Status.Status)
 	plan.CreateProgress = types.Int32Value(response.Status.CreateProgress)
 	plan.PaidTill = types.StringValue(*response.Status.PaidTill)
+	if len(response.Status.NetworkV4) > 0 {
+		plan.IPAddress = types.StringValue(response.Status.NetworkV4[0].IPAddress)
+		plan.Netmask = types.StringValue(response.Status.NetworkV4[0].Netmask)
+		plan.Gateway = types.StringValue(response.Status.NetworkV4[0].Gateway)
+	}
 
 	// Write logs using the tflog package
 	// Documentation: https://terraform.io/plugin/log
@@ -284,6 +295,11 @@ func (r *VpsResource) Read(ctx context.Context, req resource.ReadRequest, resp *
 	data.DriveTariffID = types.Int32Value(vps.DriveTariffId)
 	data.IP = types.Int32Value(vps.IP)
 	data.DDOSProtection = types.Float32Value(vps.DDOSProtection)
+	if len(vps.NetworkV4) > 0 {
+		data.IPAddress = types.StringValue(vps.NetworkV4[0].IPAddress)
+		data.Gateway = types.StringValue(vps.NetworkV4[0].Gateway)
+		data.Netmask = types.StringValue(vps.NetworkV4[0].Netmask)
+	}
 
 	if vps.VRAM != nil {
 		data.VRAM = types.Int32Value(*vps.VRAM)

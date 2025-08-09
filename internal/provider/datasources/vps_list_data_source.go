@@ -49,6 +49,9 @@ type VpsModel struct {
 	AdditionalDrive         types.Int32   `tfsdk:"additional_drive"`
 	AdditionalDriveTariffID types.Int32   `tfsdk:"additional_drive_tariff_id"`
 	UserComment             types.String  `tfsdk:"user_comment"`
+	IPAddress               types.String  `tfsdk:"ip_address"`
+	Netmask                 types.String  `tfsdk:"netmask"`
+	Gateway                 types.String  `tfsdk:"gateway"`
 }
 
 func (d *VpsListDataSource) Metadata(ctx context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
@@ -85,6 +88,9 @@ func (d *VpsListDataSource) Schema(ctx context.Context, req datasource.SchemaReq
 						"additional_drive":           schema.Int32Attribute{Computed: true},
 						"additional_drive_tariff_id": schema.Int32Attribute{Computed: true},
 						"user_comment":               schema.StringAttribute{Computed: true},
+						"ip_address":                 schema.StringAttribute{Computed: true},
+						"netmask":                    schema.StringAttribute{Computed: true},
+						"gateway":                    schema.StringAttribute{Computed: true},
 					},
 				},
 			},
@@ -147,6 +153,11 @@ func (d *VpsListDataSource) Read(ctx context.Context, req datasource.ReadRequest
 			IP:             types.Int32Value(srv.IP),
 			DDOSProtection: types.Float32Value(srv.DDOSProtection),
 		}
+		if len(srv.NetworkV4) > 0 {
+			vps.IPAddress = types.StringValue(srv.NetworkV4[0].IPAddress)
+			vps.Gateway = types.StringValue(srv.NetworkV4[0].Gateway)
+			vps.Netmask = types.StringValue(srv.NetworkV4[0].Netmask)
+		}
 		if srv.VRAM != nil {
 			vps.VRAM = types.Int32Value(*srv.VRAM)
 		} else {
@@ -206,6 +217,9 @@ func (d *VpsListDataSource) Read(ctx context.Context, req datasource.ReadRequest
 			"additional_drive":           types.Int32Type,
 			"additional_drive_tariff_id": types.Int32Type,
 			"user_comment":               types.StringType,
+			"ip_address":                 types.StringType,
+			"netmask":                    types.StringType,
+			"gateway":                    types.StringType,
 		},
 	}
 	vpsres, diags := types.ListValueFrom(ctx, vpsListType, servers)

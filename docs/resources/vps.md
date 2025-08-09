@@ -141,7 +141,7 @@ output "my_vps_output" {
 - `datacenter_id` (Number) The ID of the data center where the virtual server is located.
 - `drive` (Number) The size of the primary drive allocated to the virtual server in GB.
 - `drive_tariff_id` (Number) The ID of the tariff plan for the primary drive.
-- `ip` (Number) The ID of the IP address allocated to the virtual server.
+- `ip` (Number) The number of IP address allocated to the virtual server.
 - `os_id` (Number) The ID of the operating system installed on the virtual server.
 - `payment_period` (Number) The payment period for the virtual server.
 - `ram` (Number) The amount of RAM allocated to the virtual server in GB.
@@ -161,7 +161,10 @@ output "my_vps_output" {
 ### Read-Only
 
 - `create_progress` (Number) The progress of the virtual server creation.
+- `gateway` (String)
 - `id` (Number) The ID of the example resource.
+- `ip_address` (String)
+- `netmask` (String)
 - `paid_till` (String) The date until which the virtual server is paid.
 - `status` (String) The status of the virtual server.
 

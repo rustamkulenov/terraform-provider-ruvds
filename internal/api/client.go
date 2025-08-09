@@ -293,7 +293,7 @@ func (c *Client) GetOSList() (*OSResponse, error) {
 
 // GetVpsList retrieves a list of virtual servers from the RUVDS API.
 func (c *Client) GetVpsList() (*VirtualServersResponse, error) {
-	resp, err := getEntity[VirtualServersResponse](c, "/servers")
+	resp, err := getEntity[VirtualServersResponse](c, "/servers?get_network=true")
 	if err != nil {
 		return nil, err
 	}
@@ -302,7 +302,7 @@ func (c *Client) GetVpsList() (*VirtualServersResponse, error) {
 
 // GetVps retrieves a specific virtual server by its ID from the RUVDS API.
 func (c *Client) GetVps(id int32) (*VirtualServer, error) {
-	resp, err := getEntity[VirtualServer](c, "/servers/"+strconv.Itoa(int(id)))
+	resp, err := getEntity[VirtualServer](c, "/servers/"+strconv.Itoa(int(id))+"?get_network=true")
 	if err != nil {
 		return nil, err
 	}
@@ -311,7 +311,7 @@ func (c *Client) GetVps(id int32) (*VirtualServer, error) {
 
 // CreateVps creates a new virtual server with the provided configuration in the RUVDS API.
 func (c *Client) CreateVps(vps *VirtualServer) (*CreateVpsOkResponse, *CreateVpsErrorResponse, error) {
-	resp, descr, err := postEntity[VirtualServer, CreateVpsOkResponse, CreateVpsErrorResponse](c, "/servers", vps)
+	resp, descr, err := postEntity[VirtualServer, CreateVpsOkResponse, CreateVpsErrorResponse](c, "/servers?get_network=true", vps)
 	if err != nil {
 		return nil, descr, err
 	}
