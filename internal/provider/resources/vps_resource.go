@@ -276,6 +276,7 @@ func (r *VpsResource) Read(ctx context.Context, req resource.ReadRequest, resp *
 		)
 		return
 	}
+
 	vps, err := r.client.GetVps(data.ID.ValueInt32())
 	if err != nil {
 		resp.Diagnostics.AddError(
@@ -284,6 +285,23 @@ func (r *VpsResource) Read(ctx context.Context, req resource.ReadRequest, resp *
 		)
 		return
 	}
+
+	// Since API v.2.24 does not return network_v4 for a single server, try to get it from list of servers
+	vpses, err := r.client.GetVpsList()
+	if err != nil {
+		resp.Diagnostics.AddError(
+			"Client Error",
+			fmt.Sprintf("Unable to read virtual server list, got error: %s", err),
+		)
+		return
+	}
+	for _, vps_i := range vpses.VirtualServers {
+		if vps_i.ID == vps.ID {
+			vps.NetworkV4 = vps_i.NetworkV4
+			break
+		}
+	}
+
 	data.CreateProgress = types.Int32Value(vps.CreateProgress)
 	data.DataCenterID = types.Int32Value(vps.DataCenterId)
 	data.TariffID = types.Int32Value(vps.TariffId)
