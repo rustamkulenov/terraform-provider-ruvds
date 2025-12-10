@@ -301,6 +301,7 @@ func (c *Client) GetVpsList() (*VirtualServersResponse, error) {
 }
 
 // GetVps retrieves a specific virtual server by its ID from the RUVDS API.
+// ?get_network parameter is not implemented by API, so it does not return network info (IP addr, etc)
 func (c *Client) GetVps(id int32) (*VirtualServer, error) {
 	resp, err := getEntity[VirtualServer](c, "/servers/"+strconv.Itoa(int(id))+"?get_network=true")
 	if err != nil {
