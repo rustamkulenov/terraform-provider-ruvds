@@ -14,11 +14,11 @@ func TestAccTariffsDataSource(t *testing.T) {
 			{
 				Config: testAccTariffsDataSourceConfig,
 				Check: resource.ComposeTestCheckFunc(
-					// Check number of responces (this number may change if RUVDS adds or removes tariffs, so we just check that there are some)
+					// Check number of responses (this number may change if RUVDS adds or removes tariffs, so we just check that there are some)
 					resource.TestCheckResourceAttr("data.ruvds_tariffs.test", "vps.#", "7"),
 					// Check that only active are requested
 					resource.TestCheckResourceAttr("data.ruvds_tariffs.test", "only_active", "true"),
-					// Check value of the 1st responce
+					// Check value of the 1st response
 					resource.TestCheckResourceAttr("data.ruvds_tariffs.test", "vps.0.is_active", "true"),
 				),
 			},
