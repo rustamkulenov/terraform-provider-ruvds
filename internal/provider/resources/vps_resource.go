@@ -243,7 +243,9 @@ func (r *VpsResource) Create(ctx context.Context, req resource.CreateRequest, re
 	plan.ID = types.Int32Value(response.VirtualServerId)
 	plan.Status = types.StringValue(*response.Status.Status)
 	plan.CreateProgress = types.Int32Value(response.Status.CreateProgress)
-	plan.PaidTill = types.StringValue(*response.Status.PaidTill)
+	if response.Status.PaidTill != nil {
+    	plan.PaidTill = types.StringValue(*response.Status.PaidTill)
+	}
 	if len(response.Status.NetworkV4) > 0 {
 		plan.IPAddress = types.StringValue(response.Status.NetworkV4[0].IPAddress)
 		plan.Netmask = types.StringValue(response.Status.NetworkV4[0].Netmask)
