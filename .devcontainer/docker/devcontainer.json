@@ -1,0 +1,28 @@
+{
+  "name": "Terraform Provider Dev",
+  "build": {
+    "dockerfile": "Dockerfile"
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "golang.go",
+        "hashicorp.terraform",
+        "ms-azuretools.vscode-docker",
+        "eamodio.gitlens"
+      ]
+    }
+  },
+  "settings": {
+    "go.useLanguageServer": true,
+    "go.formatTool": "gofmt",
+    "go.lintTool": "golangci-lint",
+    "go.lintFlags": ["--fast"],
+    "go.vetOnSave": "workspace",
+    "terraform.validateOnSave": true,
+    "terraform.formatOnSave": true
+  },
+  "postCreateCommand": "go mod download",
+  "remoteUser": "vscode",
+  "updateRemoteUserUID": true
+}
