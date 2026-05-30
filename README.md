@@ -134,7 +134,7 @@ Changes to Outputs:
 
 If you wish to work on the provider, you have options:
 1) Either develop it localy. You'll need [Go](http://www.golang.org), linter, terraform\opentofu installed on your machine (see [Requirements](#requirements) above);
-2) Or use [devcontainer](https://code.visualstudio.com/docs/devcontainers/containers) and run development environment in Docker. In this case you only need to have Docker and VS Code installed.
+2) Or use [devcontainer](https://code.visualstudio.com/docs/devcontainers/containers) and run development environment in Docker. In this case you only need to have Docker and VS Code installed. You can even use tools like [devpod](https://devpod.sh/docs/what-is-devpod) to develop the provider in browser version of VS Code.
 
 The provider is built on the [Terraform Plugin Framework](https://github.com/hashicorp/terraform-plugin-framework) and uses [RuVDS API v2.24](https://ruvds.com/api-docs/).
 
