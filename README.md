@@ -2,7 +2,7 @@
 
 [RuVDS](https://ruvds.com) is an IAAS (cloud and VDS/VPS) provider offering virtual servers, dedicated hosting, domain registration, and DDoS protection at competitive prices. It features data centers in 7 countries, supporting both Linux and Windows environments. 
 
-This repository is a [Terraform](https://www.terraform.io)/[OpenTofu](https://opentofu.org/) provider allowing dynamic resource description, planning and provisioning on RuVDP and containing:
+This repository is a [Terraform](https://www.terraform.io)/[OpenTofu](https://opentofu.org/) provider allowing dynamic resource description, planning and provisioning on RuVDS and containing:
 
 - Resources and data sources (`internal/provider/`),
 - Examples (`examples/`) and generated documentation (`docs/`),
@@ -34,19 +34,19 @@ This [OpenTofu provider](https://opentofu.org/docs/language/providers/) contains
 [resources](https://opentofu.org/docs/language/resources/),
 [functions](https://opentofu.org/docs/language/functions/#provider-defined-functions) as described in the table below:
 
-| Entity | Type | Name | Description
-| --- | ---  | ---  | --- |
+| Entity | Type | Name | Description | API
+| --- | ---  | ---  | --- | --- |
 |  | Provider  | [ruvds](docs/index.md)  | Allows gettings info and managing infrastructure on RuVDS cloud |
-| Data center | Data Source | [ruvds_datacenters](docs/data-sources/datacenters.md) | Gets list of data centers filtered by country
+| Data center | Data Source | [ruvds_datacenters](docs/data-sources/datacenters.md) | Gets list of data centers filtered by country | [datacenters](https://ruvds.com/api-docs/#tag/Datacenters)
 | Data center | Data Source | [ruvds_datacenter](docs/data-sources/datacenter.md) | Gets information about specific Data center by code
-| OS | Data Source | [ruvds_os_list](docs/data-sources/os_list.md) | Gets list of all available OSes (codes) |
+| OS | Data Source | [ruvds_os_list](docs/data-sources/os_list.md) | Gets list of all available OSes (codes) | [os](https://ruvds.com/api-docs/#tag/OS)
 | OS | Data Source | [ruvds_os](docs/data-sources/os.md) | Gets OS details by code |
-| Servers | Data Source | [ruvds_vps_list](docs/data-sources/vps_list.md) | Gets list of created VPS |
+| Servers | Data Source | [ruvds_vps_list](docs/data-sources/vps_list.md) | Gets list of created VPS | [servers](https://ruvds.com/api-docs/#tag/Servers)
 | Servers | Resource | [ruvds_vps](docs/resources/vps.md) | CRUD operations on virtual servers |
 | Templates | - | - | - |
-| SSH Keys | Data Source | [ruvds_ssh_list](docs/data-sources/ssh_list.md) | Gets list of deployed SSH keys |
+| SSH Keys | Data Source | [ruvds_ssh_list](docs/data-sources/ssh_list.md) | Gets list of deployed SSH keys | [ssh-keys](https://ruvds.com/api-docs/#tag/SSH-Keys)
 | SSH Keys | Resource | [ruvds_ssh](docs/resources/ssh.md) | Imports,creates, deletes SSH keys |
-| Tarifs | - | - | - |
+| Tarifs | Data Source | [ruvds_tariffs](docs/data-sources//tariffs.md) | Gets all available tariffs (for compute, storage, services, etc) | [tariffs_list](https://ruvds.com/api-docs/#tag/Tariffs/operation/tariffs_list)
 | Balance | - | - | - |
 | Payments | - | - | - |
 
@@ -142,7 +142,7 @@ To compile the provider, run `go install`. This will build the provider and put 
 
 `go build` will build the provider and put into current folder.
 
-To generate or update documentation, run `make generate`.
+To generate or update documentation, run `make generate`. Documentation generation is required after updating provided datasources\resources or fields descriptions.
 
 ### Testing
 
@@ -183,7 +183,7 @@ How to set environment variables in VS Code (in `.vscode/settings.json`):
 
 ### Local provider override
 
-If you need to use/debug local provider in opentofu scripts then you'll probably need to configure tofu like this. Create `~/.tofurc` file with similar content (replace with your path to compiled provider folder):
+If you need to [use/debug local provider in opentofu scripts](https://opentofu.org/docs/cli/config/config-file/#development-overrides-for-provider-developers) then you'll probably need to configure tofu like this. Create `~/.tofurc` file with similar content (replace with your path to compiled provider folder):
 
 ```text
 provider_installation {

@@ -80,14 +80,31 @@ func TestGetVpsList(t *testing.T) {
 }
 
 // Test getting VPS by Id.
-func TestGetVps(t *testing.T) {
+func TestGetFirstVpsDetails(t *testing.T) {
 	if client == nil {
 		t.Skip("Skipping test which requires a live API connection")
 	}
 
-	response, err := client.GetVps(1882515)
+	vpss, err := client.GetVpsList()
+	if err != nil || len(vpss.VirtualServers) == 0 {
+		t.Fatalf("Failed to get VPS list: %v", err)
+	}
+
+	response, err := client.GetVps(vpss.VirtualServers[0].ID)
 	if err != nil {
 		t.Fatalf("Failed to get VPS list: %v", err)
+	}
+	log.Printf("%v", response)
+}
+
+func TestGetAllTariffs(t *testing.T) {
+	if client == nil {
+		t.Skip("Skipping test which requires a live API connection")
+	}
+
+	response, err := client.GetTariffs()
+	if err != nil {
+		t.Fatalf("Failed to get tariffs: %v", err)
 	}
 	log.Printf("%v", response)
 }

@@ -25,7 +25,8 @@ var _ datasource.DataSource = &OSListDataSource{}
 // OSListDataSourceModel describes the data source data model.
 type OSListDataSourceModel struct {
 	// Names is a list of OS codes available in the provider.
-	Codes    types.List   `tfsdk:"codes"`
+	Codes types.List `tfsdk:"codes"`
+	// WithType is an optional filter for OS type (e.g., 'linux', 'windows').
 	WithType types.String `tfsdk:"with_type"`
 }
 

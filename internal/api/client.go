@@ -363,3 +363,12 @@ func (c *Client) GetSshKey(sshKeyId string) (*SSHKey, error) {
 	}
 	return resp, nil
 }
+
+// Gets all tariffs (VPS, drive, additional drive, additional service, payment period discounts) from the RUVDS API.
+func (c *Client) GetTariffs() (*TariffsResponse, error) {
+	resp, err := getEntity[TariffsResponse](c, "/tariffs")
+	if err != nil {
+		return nil, err
+	}
+	return resp, nil
+}

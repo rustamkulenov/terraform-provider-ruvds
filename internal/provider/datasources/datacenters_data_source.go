@@ -24,7 +24,8 @@ var _ datasource.DataSource = &DatacentersDataSource{}
 
 // DatacentersDataSourceModel describes the data source data model.
 type DatacentersDataSourceModel struct {
-	Codes     types.List   `tfsdk:"codes"`
+	Codes types.List `tfsdk:"codes"`
+	// InCountry is an optional filter for datacenters by country code (e.g., 'RU', 'US').
 	InCountry types.String `tfsdk:"in_country"`
 }
 

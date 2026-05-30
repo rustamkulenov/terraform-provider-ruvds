@@ -109,6 +109,7 @@ func (p *RuVdsProvider) DataSources(ctx context.Context) []func() datasource.Dat
 		datasources.NewOSDataSource,
 		datasources.NewVpsListDataSource,
 		datasources.NewSshListDataSource,
+		datasources.NewTariffsDataSource,
 	}
 }
 
